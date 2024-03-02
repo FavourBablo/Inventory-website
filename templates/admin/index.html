@@ -1,0 +1,20 @@
+{% extends "admin/base.html" %}
+
+{% block admin %}
+        <!-- Using bulma to organize this admin area. See https://bulma.io/documentation/overview/ -->
+            <!-- Let us create a CRUD admin for our products and services-->
+        <div class="container is-fluid">
+            <div class="notification">
+                {{title}}:&nbsp;&nbsp;&nbsp;{{information}}
+            </div>
+
+            <div class="tabs is-boxed">
+              <ul>
+                <li><a href="/admin/products/">Products</a></li>
+                <li><a>Services</a></li>
+                <li><a>Manage Database</a></li>
+              </ul>
+            </div>
+
+        </div>
+{% endblock%}

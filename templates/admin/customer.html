@@ -1,0 +1,122 @@
+{% extends "admin/base.html" %}
+
+{% block admin %}
+        <!-- Using bulma to organize this admin area. See https://bulma.io/documentation/overview/ -->
+            <!-- Let us create a CRUD admin for our products and services-->
+        <div class="container is-fluid">
+            <div class="notification {{css}}">
+                {{title}}:&nbsp;&nbsp;&nbsp;{{information}}
+            </div>
+            <div class="tabs is-boxed">
+              <ul>
+                <li class="is-active"><a>Customer</a></li>
+                <li><a>Services</a></li>
+                <li><a>Manage Database</a></li>
+              </ul>
+            </div>
+            <div class="container is-fluid">
+                <!-- Put an add new link-->
+                <a class="fas fa-plus"  onclick="addIsActiveClassToElement('customer-add')">Register Customer</a>
+                <!-- Put a modal add form here. Inactive by default-->
+                <div id="customer-add" class="modal">
+                    <div class="modal-background"></div>
+                    <div class="modal-card">
+                        <form method="post" action="/admin/customer/process-customer-add/" onload="document.getElementById('product_inception_date').value=new Date()">
+                            <header class="modal-card-head">
+                                <p class="modal-card-title">Register Customer</p>
+                            </header>
+                            <section class="modal-card-body">
+
+                                <div class="field">
+                                    <label class="label">Customer's FirstName</label>
+                                    <div class="control">
+                                        <input name="first_name" class="input" type="text" placeholder="Enter firstname here" maxlength="40" required>
+                                    </div>
+                                    <p class="help">The customer name should not be more than 40 letters</p>
+                                </div>
+                                <div class="field">
+                                    <label class="label">Lastname</label>
+                                    <div class="control">
+                                        <input name="last_name" class="input" type="text" placeholder="Enter lastname" maxlength="20" required>
+                                    </div>
+                                    <p class="help">The lastname should not be more than 20 letters</p>
+                                </div>
+
+                                <div class="field">
+                                    <label class="label">Email</label>
+                                    <div class="control">
+                                        <input name="email" class="input" type="text"  placeholder="Enter email here" maxlength="50" required>
+                                    </div>
+                                    <p class="help">The email should not be more than 20 letters</p>
+                                </div>
+
+                            </section>
+                            <footer class="modal-card-foot">
+                                <input type="submit" class="button" value="Submit">
+                                <input class="button" value="Cancel" onclick="removeIsActiveClassFromElement('customer-add')">
+                            </footer>
+                        </form>
+                    </div>
+                    <button class="modal-close" aria-label="close" onclick="removeIsActiveClassFromElement('customer-add')"></button>
+                </div>
+
+
+
+                <!-- Show existing codes -->
+                <table class="table is-striped is-hoverable ">
+                    <thead>
+                        <tr>
+                            <th>Customer FirstName</th>
+                            <th>Lastname</th>
+                            <th>Email</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for customer in customers %}
+                                <tr>
+                                    <td>{{customer.first_name}}</td>
+                                    <td>{{customer.last_name}}</td>
+                                    <td>{{customer.email}}</td>
+                                    <td><a class="button" href="/admin/customer/detail/{{customer.customer_id}}/">View</a></td>
+                                    <td><a class="button" href="/admin/customer/edit/{{customer.customer_id}}/">Edit</a></td>
+                                    <td><a class="button" href="/admin/customer/delete/{{customer.customer_id}}/" onclick="return confirm('Are you sure you want to delete?')">Delete</a></td>
+                                    <td>
+                                        <a class="button" onclick="addIsActiveClassToElement('confirm-delete-{{customer.customer_id}}')">Delete</a>
+                                        <div id="confirm-delete-{{customer.customer_id}}" class="modal">
+                                            <div class="modal-background"></div>
+                                            <div class="modal-content">
+                                                <div class="box confirmation-box">
+                                                    Are you sure that you want to delete customer by name {{customer.first_name}}? <br/><br/>
+                                                    <a class="button" href="/admin/customer/delete/{{customer.customer_id}}/">Yes</a>
+                                                    <a class="button" onclick="removeIsActiveClassFromElement('confirm-delete-{{customer.customer_id}}')">Cancel</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+        <script>
+            function addIsActiveClassToElement(elementId){
+                //today = new Date().toLocaleDateString("en-US");
+                //document.getElementById('product_inception_date').value = today;
+                var element = document.getElementById(elementId);
+                element.classList.add("is-active");
+
+            }
+            function removeIsActiveClassFromElement(elementId){
+                var element = document.getElementById(elementId);
+                element.classList.remove("is-active");
+            }
+        </script>
+
+{% endblock%}
